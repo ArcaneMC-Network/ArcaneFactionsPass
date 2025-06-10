@@ -10,13 +10,13 @@ import org.bukkit.entity.Player;
 public class CommandHandler {
     public static void reload(FactionPassManager factionPassManager){
         factionPassManager.load();
-        // TODO: aggiungi lo start del task del FactionPassManager
+        factionPassManager.getTimedFactionManager().start();
     }
 
     public static void openPassMainGUI(FactionPassManager factionPassManager, Player player){
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
         if (fPlayer == null) {
-            player.sendMessage(factionPassManager.getConfigs().get("messages").getString("error.not-in-faction"));
+            player.sendMessage(factionPassManager.getPlugin().getConfigurationManager().get("messages").getString("error.not-in-faction"));
             return;
         }
         MainGui mainGui = factionPassManager.findMainGui(fPlayer.getFaction());
@@ -26,7 +26,7 @@ public class CommandHandler {
     public static void openPassPermsGUI(FactionPassManager factionPassManager, Player player){
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
         if (fPlayer == null) {
-            player.sendMessage(factionPassManager.getConfigs().get("messages").getString("error.not-in-faction"));
+            player.sendMessage(factionPassManager.getPlugin().getConfigurationManager().get("messages").getString("error.not-in-faction"));
             return;
         }
         MainGui mainGui = factionPassManager.findMainGui(fPlayer.getFaction());
@@ -36,7 +36,7 @@ public class CommandHandler {
     public static void openPassGUI(FactionPassManager factionPassManager, Player player, Pass pass){
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
         if (fPlayer == null) {
-            player.sendMessage(factionPassManager.getConfigs().get("messages").getString("error.not-in-faction"));
+            player.sendMessage(factionPassManager.getPlugin().getConfigurationManager().get("messages").getString("error.not-in-faction"));
             return;
         }
         MainGui mainGui = factionPassManager.findMainGui(fPlayer.getFaction());

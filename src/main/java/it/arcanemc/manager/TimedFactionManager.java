@@ -3,27 +3,32 @@ package it.arcanemc.manager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.arcanemc.ArcanePlugin;
 import it.arcanemc.data.TimedFaction;
+import it.arcanemc.util.Timer;
 import it.arcanemc.util.json.interfaces.JsonSerializable;
 import it.arcanemc.util.json.JsonHandler;
 import it.arcanemc.util.json.interfaces.ReadJsonSerializable;
 import it.arcanemc.util.json.interfaces.WriteJsonSerializable;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class TimedFactionManager extends BukkitRunnable implements JsonSerializable, ReadJsonSerializable, WriteJsonSerializable {
-    private final FileConfiguration config;
+public class TimedFactionManager implements JsonSerializable, ReadJsonSerializable, WriteJsonSerializable {
+    private final ArcanePlugin plugin;
     private final ArrayList<TimedFaction> timedFactions;
     private final JsonHandler jsonHandler;
+    private BukkitRunnable task;
 
-    public TimedFactionManager(FileConfiguration config, String path) {
-        this.config = config;
+    public TimedFactionManager(ArcanePlugin plugin) {
+        this.plugin = plugin;
         this.timedFactions = new ArrayList<>();
-        this.jsonHandler = new JsonHandler(path, "timed_factions.json");
+        this.jsonHandler = new JsonHandler(
+                this.plugin.getDataFolder().getAbsolutePath(),
+                "timed_factions.json"
+        );
         this.load();
         this.sort();
     }
@@ -78,27 +83,31 @@ public class TimedFactionManager extends BukkitRunnable implements JsonSerializa
         this.timedFactions.sort(Comparator.comparingLong(TimedFaction::getTimer).reversed());
     }
 
-    @Override
-    public void run() {
-        for (TimedFaction faction : timedFactions) {
-            int onlineCount = faction.getFaction().getOnlinePlayers().size();
-            boolean isAboveThreshold = onlineCount >= this.config.getInt("settings.min-player-to-trigger");
-            faction.update(isAboveThreshold);
-        }
-        this.save();
-    }
+    public void start() {
+        this.stop();
 
-    public void start(long intervalTicks, Plugin plugin) {
-        try {
-            this.cancel();
-        } catch (IllegalStateException e) {
-            // Ignore if the task was not running
-        }
+        FileConfiguration config = this.plugin.getConfigurationManager().get("config");
+        long period = Timer.convertVerbose(config.getString("settings.update")) / 1000L * 20L;
 
-        this.runTaskTimer(plugin, 0L, intervalTicks);
+        this.task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (TimedFaction faction : timedFactions) {
+                    int onlineCount = faction.getFaction().getOnlinePlayers().size();
+                    boolean isAboveThreshold = onlineCount >= config.getInt("settings.min-player-to-trigger");
+                    faction.update(isAboveThreshold);
+                }
+                save();
+            }
+        };
+
+        this.task.runTaskTimer(this.plugin, 0L, period);
     }
 
     public void stop() {
-        this.cancel();
+        if (this.task != null && this.task.getTaskId() != -1) {
+            this.task.cancel();
+            this.task = null;
+        }
     }
 }

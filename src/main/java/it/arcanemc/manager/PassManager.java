@@ -55,14 +55,13 @@ public class PassManager {
                     String requiredTimeVerbose = rewardSection.getString("required-time");
                     long requiredTime = Timer.convertVerbose(requiredTimeVerbose);
                     ItemStack itemStack = ItemStackLoader.get(itemSection);
-                    String name = rewardSection.getString("name");
                     ArrayList<String> commands = (ArrayList<String>) rewardSection.getStringList("commands");
                     String passName = rewardSection.getString("pass");
                     Optional<Pass> optionalPass = passes.keySet().stream()
                             .filter(instance -> passName.equalsIgnoreCase(instance.getName()))
                             .findFirst();
                     optionalPass.ifPresent(pass -> {
-                        Reward reward = new Reward(name, itemStack, commands, requiredTime, pass);
+                        Reward reward = new Reward(key, itemStack, commands, requiredTime, pass);
                         ArrayList<Reward> rewards = this.passes.get(pass);
                         if (rewards != null) {
                             rewards.add(reward);

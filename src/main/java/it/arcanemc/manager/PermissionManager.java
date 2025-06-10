@@ -30,6 +30,8 @@ public class PermissionManager implements JsonSerializable {
                 return this.moderator;
             case "coleader":
                 return this.coleader;
+            case "admin":
+                return true;
         }
         throw new IllegalArgumentException(String.format("%s does not exist as role", role));
     }

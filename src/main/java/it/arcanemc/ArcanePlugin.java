@@ -3,10 +3,12 @@ package it.arcanemc;
 import it.arcanemc.configuration.ConfigurationManager;
 import it.arcanemc.configuration.DependencyManager;
 import it.arcanemc.configuration.ListenerManager;
+import lombok.Getter;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 
+@Getter
 public abstract class ArcanePlugin extends JavaPlugin {
     protected DependencyManager dependencyManager;
     protected ConfigurationManager configurationManager;

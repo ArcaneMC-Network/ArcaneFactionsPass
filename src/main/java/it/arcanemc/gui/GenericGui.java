@@ -118,7 +118,11 @@ public abstract class GenericGui {
 
         }
         for (NumberedGuiItem item : this.items) {
-            this.gui.setItem(item.getSlot(), item.getGuiItem());
+            if (navigationRow != null)
+                this.gui.addItem(item.getGuiItem());
+            else {
+                this.gui.setItem(item.getSlot(), item.getGuiItem());
+            }
         }
 
         if (fillEmptySlots) {

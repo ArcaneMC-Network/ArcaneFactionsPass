@@ -29,7 +29,7 @@ passes:
       quantity: 1
 
 rewards:
-  - name: "faction-bundle"
+  faction-bundle:
     item:
       display-name: "&d&lFactions Bundle"
       lore:
@@ -42,7 +42,7 @@ rewards:
       - bundle give {faction} 5man
     required-time: "15m"
     pass: "basic"
-  - name: "20k-token"
+  20k-token:
     item:
       display-name: "&d&l20K TOKENS"
       lore:

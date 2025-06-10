@@ -4,7 +4,6 @@ import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import it.arcanemc.command.FPassCommand;
 import it.arcanemc.listener.FactionListener;
 import it.arcanemc.manager.FactionPassManager;
-import it.arcanemc.util.Timer;
 import lombok.Getter;
 import org.bukkit.event.Listener;
 
@@ -48,7 +47,6 @@ public final class ArcaneFactionsPass extends ArcanePlugin {
 
     @Override
     public void performInitialization() {
-        this.factionPassManager = new FactionPassManager(this.configurationManager, getDataFolder().getAbsolutePath());
-        this.factionPassManager.getTimedFactionManager().start(Timer.convertVerbose(this.configurationManager.get("config").getString("settings.update")), this);
+        this.factionPassManager = new FactionPassManager(this);
     }
 }

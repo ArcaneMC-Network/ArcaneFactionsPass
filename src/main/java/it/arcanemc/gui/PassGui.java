@@ -2,6 +2,7 @@ package it.arcanemc.gui;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
+import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
@@ -16,6 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -26,11 +28,17 @@ public class PassGui extends GenericGui {
     private final ArrayList<Reward> rewards;
     private final ItemStack genericClaimed;
     private final int navigationRow;
+    private final boolean fillNavigationRowEmptySlot;
+    private final ItemStack emptyNavigationItem;
 
     public PassGui(FileConfiguration guiConfig, FileConfiguration messages, TimedFaction timedFaction, GenericGui mainGui, ArrayList<Reward> rewards) {
         ConfigurationSection passMenuSection = guiConfig.getConfigurationSection("pass-menu");
         if (passMenuSection != null) {
-            this.initialize(passMenuSection, Map.of(), Map.of("info", Map.of("{time}", Timer.getVerbose(timedFaction.getTimer()))));
+            Map<String, String> replaces = new HashMap<>();
+            if (!rewards.isEmpty()){
+                replaces.put("{name}", Format.capitalize(rewards.get(0).getPass().getName()));
+            }
+            this.initialize(passMenuSection, replaces, Map.of("info", Map.of("{time}", Timer.getVerbose(timedFaction.getTimer()))));
         }
         this.timedFaction = timedFaction;
         this.messages = messages;
@@ -38,6 +46,8 @@ public class PassGui extends GenericGui {
         this.rewards = rewards;
         this.genericClaimed = ItemStackLoader.get(guiConfig.getConfigurationSection("pass-menu.claimed-item"));
         this.navigationRow = guiConfig.getInt("pass-menu.navigation-row");
+        this.fillNavigationRowEmptySlot = guiConfig.getBoolean("pass-menu.fill-navigation-row-empty-slot.enabled");
+        this.emptyNavigationItem = ItemStackLoader.get(guiConfig.getConfigurationSection("pass-menu.fill-navigation-row-empty-slot.item"));
         this.create(Gui.paginated());
         this.setItems(guiConfig);
         this.populate(true, this.navigationRow);
@@ -54,10 +64,6 @@ public class PassGui extends GenericGui {
     @Override
     public void setItems(ConfigurationSection guiConfig) {
         this.items = new ArrayList<>();
-        // print all rewards
-        if (!this.rewards.isEmpty()) {
-            this.rewards.forEach(r -> System.out.println("Reward: " + r.getName() + " - " + r.getRequiredTime()));
-        }
         for (Reward reward : this.rewards) {
             ItemStack itemStack = reward.getItemStack().clone();
             long timedLeft = reward.getRequiredTime() - timedFaction.getTimer();
@@ -83,7 +89,7 @@ public class PassGui extends GenericGui {
         }
         if (timeLeft > 0) {
             Msg.player(player.getPlayer(), messages.getString("reward.claim.deny"));
-        } else if (!timedFaction.getPermissions().get(player.getRole().value)) {
+        } else if (!timedFaction.getPermissions().get(player.getRole().nicename)) {
             Msg.player(player.getPlayer(), messages.getString("permissions.deny"));
         } else if (timedFaction.claimReward(player, reward)) {
             String successMessage = messages.getString("reward.claim.success")
@@ -103,7 +109,9 @@ public class PassGui extends GenericGui {
     public Map<String, GuiAction<InventoryClickEvent>> getDefaultActions() {
         return Map.of(
                 "previous", e -> ((PaginatedGui) this.gui).previous(),
-                "next", e -> ((PaginatedGui) this.gui).next(),
+                "next", e -> {
+                    ((PaginatedGui) this.gui).next();
+                },
                 "back", e -> {
                     FPlayer player = FPlayers.getInstance().getByPlayer((Player) e.getWhoClicked());
                     if (player != null) {
@@ -111,5 +119,20 @@ public class PassGui extends GenericGui {
                     }
                 }
         );
+    }
+
+    @Override
+    public void populate(boolean fillEmptySlots, Integer navigationRow) {
+        if (this.fillNavigationRowEmptySlot){
+            this.gui.getFiller().fillBetweenPoints(
+                    navigationRow,
+                    1,
+                    navigationRow,
+                    9,
+                    ItemBuilder.from(this.emptyNavigationItem).asGuiItem()
+            );
+        }
+
+        super.populate(fillEmptySlots, navigationRow);
     }
 }

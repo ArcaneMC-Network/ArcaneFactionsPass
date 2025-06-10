@@ -27,9 +27,10 @@ public class FPassCommand {
     void executeFPassReload(@Context CommandSender commandSender) {
         try {
             CommandHandler.reload(this.factionPassManager);
-            commandSender.sendMessage(Colors.translate(this.factionPassManager.getConfigs().get("messages").getString("admin.reload.success")));
+            commandSender.sendMessage(Colors.translate(factionPassManager.getPlugin().getConfigurationManager().get("messages").getString("admin.reload.success")));
         } catch (Exception e){
-            commandSender.sendMessage(Colors.translate(this.factionPassManager.getConfigs().get("messages").getString("admin.reload.deny")));
+            commandSender.sendMessage(Colors.translate(factionPassManager.getPlugin().getConfigurationManager().get("messages").getString("admin.reload.deny")));
+            e.printStackTrace();
         }
     }
 }

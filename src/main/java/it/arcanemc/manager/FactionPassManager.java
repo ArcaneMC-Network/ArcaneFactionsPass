@@ -1,10 +1,12 @@
 package it.arcanemc.manager;
 
 import com.massivecraft.factions.Faction;
+import it.arcanemc.ArcanePlugin;
 import it.arcanemc.configuration.ConfigurationManager;
 import it.arcanemc.data.Pass;
 import it.arcanemc.data.TimedFaction;
 import it.arcanemc.gui.MainGui;
+import it.arcanemc.util.Timer;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -14,29 +16,29 @@ import java.util.stream.Collectors;
 
 @Getter
 public class FactionPassManager {
+    private final ArcanePlugin plugin;
     private PassManager passManager;
     private TimedFactionManager timedFactionManager;
-    private final ConfigurationManager configs;
     private ArrayList<MainGui> guiList;
-    private final String dataFolder;
 
-    public FactionPassManager(ConfigurationManager configs, String dataFolder) {
-        this.configs = configs;
-        this.dataFolder = dataFolder;
+    public FactionPassManager(ArcanePlugin plugin) {
+        this.plugin = plugin;
         this.load();
     }
 
     public void load(){
-        this.configs.reload();
-        this.passManager = new PassManager(this.configs.get("config"));
-        this.timedFactionManager = new TimedFactionManager(this.configs.get("config"), dataFolder);
-        passManager.load(this.configs.get("config"));
+        ConfigurationManager configs = this.plugin.getConfigurationManager();
+        configs.reload();
+        this.passManager = new PassManager(configs.get("config"));
+        this.timedFactionManager = new TimedFactionManager(this.plugin);
+        passManager.load(configs.get("config"));
         timedFactionManager.load();
         this.guiList = new ArrayList<>();
         timedFactionManager.get().forEach(timedFaction -> {
             MainGui mainGui = new MainGui(configs.get("gui"), configs.get("messages"), timedFaction, this.passManager);
             this.guiList.add(mainGui);
         });
+        timedFactionManager.start();
     }
 
     public List<Pass> getDefaultPassNames(){
@@ -46,6 +48,7 @@ public class FactionPassManager {
     }
 
     public void addFaction(Faction faction){
+        ConfigurationManager configs = this.plugin.getConfigurationManager();
         TimedFaction timedFaction = new TimedFaction(faction);
         this.getDefaultPassNames().forEach(timedFaction::unlockPass);
         this.timedFactionManager.add(timedFaction);
@@ -76,5 +79,4 @@ public class FactionPassManager {
                 )
                 .orElse(null);
     }
-
 }
