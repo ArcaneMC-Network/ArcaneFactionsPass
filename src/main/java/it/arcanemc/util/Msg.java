@@ -1,4 +1,4 @@
-package it.arcanemc.utils;
+package it.arcanemc.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -1,4 +1,4 @@
-package it.arcanemc.configurations;
+package it.arcanemc.configuration;
 
 import lombok.Getter;
 import org.bukkit.event.Listener;

@@ -1,4 +1,4 @@
-package it.arcanemc.utils;
+package it.arcanemc.util;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

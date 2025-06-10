@@ -1,4 +1,4 @@
-package it.arcanemc.utils.json;
+package it.arcanemc.util.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

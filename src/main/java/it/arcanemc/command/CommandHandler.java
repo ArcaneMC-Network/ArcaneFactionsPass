@@ -1,11 +1,10 @@
-package it.arcanemc.commands;
+package it.arcanemc.command;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
-import it.arcanemc.configurations.ConfigurationManager;
 import it.arcanemc.data.Pass;
 import it.arcanemc.gui.MainGui;
-import it.arcanemc.managers.FactionPassManager;
+import it.arcanemc.manager.FactionPassManager;
 import org.bukkit.entity.Player;
 
 public class CommandHandler {

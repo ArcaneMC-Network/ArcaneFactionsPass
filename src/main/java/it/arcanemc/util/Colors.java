@@ -1,4 +1,4 @@
-package it.arcanemc.utils;
+package it.arcanemc.util;
 
 import net.md_5.bungee.api.ChatColor;
 

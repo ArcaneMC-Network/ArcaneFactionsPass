@@ -1,9 +1,9 @@
-package it.arcanemc.managers;
+package it.arcanemc.manager;
 
 import it.arcanemc.data.Pass;
 import it.arcanemc.data.Reward;
-import it.arcanemc.utils.ItemStackLoader;
-import it.arcanemc.utils.Timer;
+import it.arcanemc.util.ItemStackLoader;
+import it.arcanemc.util.Timer;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

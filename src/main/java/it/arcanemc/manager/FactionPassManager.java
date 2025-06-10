@@ -1,7 +1,7 @@
-package it.arcanemc.managers;
+package it.arcanemc.manager;
 
 import com.massivecraft.factions.Faction;
-import it.arcanemc.configurations.ConfigurationManager;
+import it.arcanemc.configuration.ConfigurationManager;
 import it.arcanemc.data.Pass;
 import it.arcanemc.data.TimedFaction;
 import it.arcanemc.gui.MainGui;

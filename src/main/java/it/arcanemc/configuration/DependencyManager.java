@@ -1,4 +1,4 @@
-package it.arcanemc.configurations;
+package it.arcanemc.configuration;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 @Getter
 public class DependencyManager {
+    private final Plugin plugin;
     private final ArrayList<String> dependencies;
 
-    public DependencyManager() {
+    public DependencyManager(Plugin plugin) {
+        this.plugin = plugin;
         this.dependencies = new ArrayList<>();
     }
 

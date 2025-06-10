@@ -7,7 +7,7 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import it.arcanemc.data.Reward;
 import it.arcanemc.data.TimedFaction;
-import it.arcanemc.utils.*;
+import it.arcanemc.util.*;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

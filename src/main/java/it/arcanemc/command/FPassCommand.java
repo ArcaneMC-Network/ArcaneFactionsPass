@@ -1,11 +1,11 @@
-package it.arcanemc.commands;
+package it.arcanemc.command;
 
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
-import it.arcanemc.managers.FactionPassManager;
-import it.arcanemc.utils.Colors;
+import it.arcanemc.manager.FactionPassManager;
+import it.arcanemc.util.Colors;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

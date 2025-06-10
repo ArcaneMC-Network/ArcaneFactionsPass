@@ -7,8 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import it.arcanemc.managers.PermissionManager;
-import it.arcanemc.utils.json.interfaces.JsonSerializable;
+import it.arcanemc.manager.PermissionManager;
+import it.arcanemc.util.json.interfaces.JsonSerializable;
 import lombok.Getter;
 
 import java.util.ArrayList;

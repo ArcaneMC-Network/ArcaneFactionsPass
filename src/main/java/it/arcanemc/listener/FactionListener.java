@@ -1,7 +1,7 @@
-package it.arcanemc.listeners;
+package it.arcanemc.listener;
 
 import com.massivecraft.factions.event.*;
-import it.arcanemc.managers.FactionPassManager;
+import it.arcanemc.manager.FactionPassManager;
 import lombok.Getter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

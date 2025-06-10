@@ -1,4 +1,4 @@
-package it.arcanemc.utils;
+package it.arcanemc.util;
 
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.components.GuiAction;

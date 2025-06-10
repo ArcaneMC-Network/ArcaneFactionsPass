@@ -1,7 +1,7 @@
-package it.arcanemc.managers;
+package it.arcanemc.manager;
 
 import com.google.gson.JsonObject;
-import it.arcanemc.utils.json.interfaces.JsonSerializable;
+import it.arcanemc.util.json.interfaces.JsonSerializable;
 import lombok.Getter;
 import lombok.Setter;
 

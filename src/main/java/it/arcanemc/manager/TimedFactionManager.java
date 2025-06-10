@@ -1,13 +1,13 @@
-package it.arcanemc.managers;
+package it.arcanemc.manager;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.arcanemc.data.TimedFaction;
-import it.arcanemc.utils.json.interfaces.JsonSerializable;
-import it.arcanemc.utils.json.JsonHandler;
-import it.arcanemc.utils.json.interfaces.ReadJsonSerializable;
-import it.arcanemc.utils.json.interfaces.WriteJsonSerializable;
+import it.arcanemc.util.json.interfaces.JsonSerializable;
+import it.arcanemc.util.json.JsonHandler;
+import it.arcanemc.util.json.interfaces.ReadJsonSerializable;
+import it.arcanemc.util.json.interfaces.WriteJsonSerializable;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;

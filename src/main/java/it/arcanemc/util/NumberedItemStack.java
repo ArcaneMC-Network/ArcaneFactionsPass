@@ -1,4 +1,4 @@
-package it.arcanemc.utils;
+package it.arcanemc.util;
 
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;

@@ -1,4 +1,4 @@
-package it.arcanemc.utils.json.interfaces;
+package it.arcanemc.util.json.interfaces;
 
 public interface ReadJsonSerializable {
     void load();

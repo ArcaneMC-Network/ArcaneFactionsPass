@@ -1,4 +1,4 @@
-package it.arcanemc.configurations;
+package it.arcanemc.configuration;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
