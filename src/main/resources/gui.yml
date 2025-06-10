@@ -1,0 +1,137 @@
+main-menu:
+  rows: 1
+  title: "&d&lFaction Pass"
+  passes:
+    - name: "basic"
+      slot: 1
+    - name: "premium"
+      slot: 3
+  default-items:
+    perms:
+      display-name: "&d&lPermessi"
+      lore: []
+      material: "BOOK_AND_QUILL"
+      glow: true
+      data: 0
+      quantity: 1
+      slot: 5
+    info:
+      display-name: "&d&lInformazioni"
+      lore:
+        - "&oTempo giocato: &f{time}"
+      material: "WATCH"
+      glow: true
+      data: 0
+      quantity: 1
+      slot: 7
+  fill-empty-slots:
+    enabled: true
+    item:
+      display-name: "&9"
+      lore: []
+      material: "STAINED_GLASS_PANE"
+      glow: false
+      data: 9
+      quantity: 1
+
+perms-menu:
+  rows: 1
+  title: "&d&lFaction Pass Perms"
+  perm:
+    display-name: "&d&l{perm}"
+    lore:
+      - "&7Clicca per attivare o disattivare il permesso per ritirare le ricompense"
+      - ""
+      - "&7Stato: {state}"
+      - ""
+    material: "PAPER"
+    glow: false
+    data: 0
+    quantity: 1
+    slots:
+      coleader: 3
+      moderator: 2
+      member: 1
+      recruit: 0
+  default-items:
+    back:
+      display-name: "&cIndietro"
+      lore: []
+      material: "COMPASS"
+      glow: false
+      data: 0
+      quantity: 1
+      slot: 8
+  fill-empty-slots:
+    enabled: true
+    item:
+      display-name: "&9"
+      lore: []
+      material: "STAINED_GLASS_PANE"
+      glow: false
+      data: 9
+      quantity: 1
+
+pass-menu:
+  rows: 2
+  navigation-row: 2
+  title: "&d&lPass {name}"
+  default-items:
+    previous:
+      display-name: "&cIndietro"
+      lore: []
+      material: "PAPER"
+      glow: false
+      data: 0
+      quantity: 1
+      slot: 3
+    next:
+      display-name: "&cAvanti"
+      lore: []
+      material: "PAPER"
+      glow: false
+      data: 0
+      quantity: 1
+      slot: 5
+    info:
+      display-name: "&d&lInformazioni"
+      lore:
+        - "&oTempo giocato: &f{time}"
+      material: "WATCH"
+      glow: true
+      data: 0
+      quantity: 1
+      slot: 0
+    back:
+      display-name: "&cIndietro"
+      lore: [ ]
+      material: "COMPASS"
+      glow: false
+      data: 0
+      quantity: 1
+      slot: 8
+  claimed-item:
+    display-name: "&cRiscattato"
+    lore: [ ]
+    material: "BARRIER"
+    glow: false
+    data: 0
+    quantity: 1
+  fill-empty-slots:
+    enabled: false
+    item:
+      display-name: "&9"
+      lore: []
+      material: "STAINED_GLASS_PANE"
+      glow: false
+      data: 15
+      quantity: 1
+  fill-navigation-row-empty-slot:
+    enabled: true
+    item:
+      display-name: "&9"
+      lore: []
+      material: "STAINED_GLASS_PANE"
+      glow: false
+      data: 15
+      quantity: 1

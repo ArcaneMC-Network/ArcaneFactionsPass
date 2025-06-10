@@ -1,0 +1,8 @@
+name: ArcaneFactionsPass
+version: '1.0'
+main: it.arcanemc.ArcaneFactionsPass
+depend:
+  - Factions
+softdepend:
+  - PlaceholderAPI
+

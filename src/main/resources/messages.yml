@@ -1,0 +1,44 @@
+errors:
+  pass-not-found: "&cPass non trovato"
+  reward-not-found: "&cRicompensa non trovata"
+  faction-not-found: "&cFazione non trovata"
+
+admin:
+  reload:  # fpass reload
+    success: "&aPlugin riavviato correttamente"
+    deny: "&cPlugin non riavviato correttamente, controlla la console"
+  show:  # fpass show {faction}
+    success: "&aLa fazione {faction} possiede i pass: {passes}"
+  add:  # fpass add {faction} {pass}
+    success: "&aAggiunto correttamente il pass {pass} alla fazione {faction}"
+    deny: "&cLa fazione {faction} possiede già il pass {pass}"
+  remove:  # fpass remove {faction} {pass}
+    success: "&aRimosso correttamente il pass {pass} alla fazione {faction}"
+    deny: "&cLa fazione {faction} non possiede il pass {pass}"
+
+reward:
+  claim:
+    success: "&6&lF-PASS &8- &fRiscattata la &d{number}° &fricompensa del pass {name}"
+    deny: "&6&lF-PASS &8- &fLa tua fazione non ha abbastanza tempo giocato"
+    locked: "&6&lF-PASS &8- &fLa tua fazione non possiede il pass {name}"
+    already-claimed: "&6&lF-PASS &8- &fLa tua fazione ha già riscattato questa ricompensa"
+  available: "&a&lRiscattabile"
+
+
+
+unlock-pass:
+  success: "&6&lF-PASS &8- &fLa fazione {faction} ha sbloccato il pass {name}"
+  deny: "&6&lF-PASS &8- &fLa tua fazione possiede già il pass {name}"
+
+permissions:
+  only-leader: "&cSolo il leader può accedere ai permessi"
+  deny: "&cIl tuo ruolo non ti permette di riscattare le ricompense"
+
+  roles:
+    coleader: "Coleader"
+    moderator: "Moderatore"
+    member: "Membro"
+    recruit: "Recluta"
+  toggle:
+    enabled: "&a&lON"
+    disabled: "&c&lOFF"

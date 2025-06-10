@@ -1,0 +1,57 @@
+settings:
+  min-player-to-trigger: 5
+  broadcast-messages:
+    unlock-pass.success: true
+    claim-reward.success: false
+  update: "1s"
+
+passes:
+  basic:
+    default: true
+    item:
+      display-name: "&d&lBasic Pass"
+      lore: []
+      material: "BOOK"
+      glow: true
+      data: 0
+      quantity: 1
+  premium:
+    default: false
+    item:
+      display-name: "&d&lPremium Pass"
+      lore:
+        - ""
+        - "&8&oCompralo su www.arcanemc.it/store"
+        - ""
+      material: "ENCHANTED_BOOK"
+      glow: true
+      data: 0
+      quantity: 1
+
+rewards:
+  - name: "faction-bundle"
+    item:
+      display-name: "&d&lFactions Bundle"
+      lore:
+        - "&7&oTempo richiesto: &f&o{time}"
+      material: "CHEST_MINECART"
+      glow: true
+      data: 0
+      quantity: 1
+    commands:
+      - bundle give {faction} 5man
+    required-time: "15m"
+    pass: "basic"
+  - name: "20k-token"
+    item:
+      display-name: "&d&l20K TOKENS"
+      lore:
+        - "&7&oTempo richiesto: &f&o{time}"
+      material: "PAPER"
+      glow: true
+      data: 0
+      quantity: 1
+    commands:
+      - tokens give {player} 20000
+    required-time: "1h"
+    pass: "basic"
