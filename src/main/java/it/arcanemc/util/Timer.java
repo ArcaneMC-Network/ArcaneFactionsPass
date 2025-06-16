@@ -5,10 +5,11 @@ import java.util.regex.Pattern;
 
 public class Timer {
     public static String getVerbose(long timeInMilliseconds) {
+        timeInMilliseconds = timeInMilliseconds / 1000L;
+
         if (timeInMilliseconds <= 0L){
             return "0s";
         }
-        timeInMilliseconds = timeInMilliseconds / 1000L;
 
         long days = 0;
         long hours = 0;

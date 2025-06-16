@@ -1,0 +1,47 @@
+enabled: true
+
+sounds:
+  open-sub-gui:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  reward-claimed:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  reward-claim-failed:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  reward-already-claimed:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  pass-locked:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  unlock-pass-success:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  previous-page:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  next-page:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  back-button:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  toggle-permission:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0
+  error:
+    name: "LEVEL_UP"
+    volume: 1.0
+    pitch: 1.0

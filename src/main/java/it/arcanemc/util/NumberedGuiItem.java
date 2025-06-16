@@ -50,4 +50,8 @@ public class NumberedGuiItem extends NumberedItemStack{
     public NumberedGuiItem(ItemStack itemStack, int slot) {
         this(itemStack, slot, null);
     }
+
+    public Map.Entry<Integer, GuiItem> getEntry() {
+        return Map.entry(this.getSlot(), this.guiItem);
+    }
 }

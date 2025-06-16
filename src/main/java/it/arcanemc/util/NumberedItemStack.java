@@ -1,5 +1,6 @@
 package it.arcanemc.util;
 
+import it.arcanemc.util.loader.ItemStackLoader;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;

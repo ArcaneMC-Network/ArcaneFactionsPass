@@ -5,11 +5,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class DependencyManager {
     private final Plugin plugin;
-    private final ArrayList<String> dependencies;
+    private final List<String> dependencies;
 
     public DependencyManager(Plugin plugin) {
         this.plugin = plugin;

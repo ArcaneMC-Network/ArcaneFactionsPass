@@ -6,11 +6,12 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ConfigurationManager {
     private final Plugin plugin;
 
-    private HashMap<String, FileConfiguration> configurations;
+    private Map<String, FileConfiguration> configurations;
 
     public ConfigurationManager(Plugin plugin) {
         this.plugin = plugin;

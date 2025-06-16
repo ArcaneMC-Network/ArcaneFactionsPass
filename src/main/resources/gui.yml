@@ -2,9 +2,9 @@ main-menu:
   rows: 1
   title: "&d&lFaction Pass"
   passes:
-    - name: "basic"
+    basic:
       slot: 1
-    - name: "premium"
+    premium:
       slot: 3
   default-items:
     perms:

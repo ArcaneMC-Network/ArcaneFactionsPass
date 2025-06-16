@@ -1,5 +1,6 @@
 package it.arcanemc.command;
 
+import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
@@ -27,10 +28,19 @@ public class FPassCommand {
     void executeFPassReload(@Context CommandSender commandSender) {
         try {
             CommandHandler.reload(this.factionPassManager);
-            commandSender.sendMessage(Colors.translate(factionPassManager.getPlugin().getConfigurationManager().get("messages").getString("admin.reload.success")));
+            commandSender.sendMessage(Colors.translate(factionPassManager.getPlugin().getConfigurationManager().get("message").getString("admin.reload.success")));
         } catch (Exception e){
-            commandSender.sendMessage(Colors.translate(factionPassManager.getPlugin().getConfigurationManager().get("messages").getString("admin.reload.deny")));
+            commandSender.sendMessage(Colors.translate(factionPassManager.getPlugin().getConfigurationManager().get("message").getString("admin.reload.deny")));
             e.printStackTrace();
         }
+    }
+
+    @Execute(name="show")
+    @Permission("arcanefactionspass.admin.show")
+    void executeFPassShow(
+            @Context CommandSender commandSender,
+            @Arg String factionName
+    ) {
+        CommandHandler.showTimedFactionAvailablePasses(this.factionPassManager, factionName, commandSender);
     }
 }

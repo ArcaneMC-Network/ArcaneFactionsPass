@@ -3,6 +3,8 @@ package it.arcanemc.manager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
 import it.arcanemc.ArcanePlugin;
 import it.arcanemc.data.TimedFaction;
 import it.arcanemc.util.Timer;
@@ -15,10 +17,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class TimedFactionManager implements JsonSerializable, ReadJsonSerializable, WriteJsonSerializable {
     private final ArcanePlugin plugin;
-    private final ArrayList<TimedFaction> timedFactions;
+    private final List<TimedFaction> timedFactions;
     private final JsonHandler jsonHandler;
     private BukkitRunnable task;
 
@@ -57,8 +60,23 @@ public class TimedFactionManager implements JsonSerializable, ReadJsonSerializab
         }
     }
 
+    public void syncFromFactions() {
+        for (Faction faction : Factions.getInstance().getAllFactions()) {
+            if (!faction.isNormal()) {
+                continue;
+            }
+            boolean exists = timedFactions.stream()
+                    .anyMatch(timedFaction -> timedFaction.getFaction().getId().equals(faction.getId()));
+            if (!exists) {
+                TimedFaction timedFaction = new TimedFaction(faction);
+                this.timedFactions.add(timedFaction);
+            }
+        }
+    }
+
     public void load(){
         this.fromJson(jsonHandler.loadJson());
+        this.syncFromFactions();
     }
 
     public void save(){
@@ -75,7 +93,7 @@ public class TimedFactionManager implements JsonSerializable, ReadJsonSerializab
         this.save();
     }
 
-    public ArrayList<TimedFaction> get(){
+    public List<TimedFaction> get(){
         return this.timedFactions;
     }
 
@@ -87,7 +105,7 @@ public class TimedFactionManager implements JsonSerializable, ReadJsonSerializab
         this.stop();
 
         FileConfiguration config = this.plugin.getConfigurationManager().get("config");
-        long period = Timer.convertVerbose(config.getString("settings.update")) / 1000L * 20L;
+        long period = Timer.convertVerbose(config.getString("settings.update")) / 50L;
 
         this.task = new BukkitRunnable() {
             @Override

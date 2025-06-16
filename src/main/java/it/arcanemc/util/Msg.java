@@ -1,6 +1,7 @@
 package it.arcanemc.util;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static org.bukkit.Bukkit.getLogger;
@@ -18,5 +19,8 @@ public class Msg {
 
     public static void player(Player player, String message){
         player.sendMessage(Colors.translate(message));
+    }
+    public static void sender(CommandSender sender, String message){
+        sender.sendMessage(Colors.translate(message));
     }
 }

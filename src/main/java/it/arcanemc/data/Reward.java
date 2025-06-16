@@ -5,18 +5,18 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class Reward {
 
     private final String name;
     private final ItemStack itemStack;
-    private final ArrayList<String> commands;
+    private final List<String> commands;
     private final long requiredTime;
     private final Pass pass;
 
-    public Reward(String name, ItemStack itemStack, ArrayList<String> commands, long requiredTime, Pass pass) {
+    public Reward(String name, ItemStack itemStack, List<String> commands, long requiredTime, Pass pass) {
         this.name = name;
         this.itemStack = itemStack;
         this.commands = commands;

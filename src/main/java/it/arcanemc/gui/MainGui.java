@@ -11,8 +11,8 @@ import it.arcanemc.manager.PassManager;
 import it.arcanemc.util.Msg;
 import it.arcanemc.util.NumberedGuiItem;
 import it.arcanemc.util.Timer;
+import it.arcanemc.util.loader.SoundLoader;
 import lombok.Getter;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -24,17 +24,22 @@ public class MainGui extends GenericGui{
     private final TimedFaction timedFaction;
     private final GenericGui permsGui;
     private final FileConfiguration messages;
-    private final HashMap<Pass, GenericGui> passesGui;
+    private final FileConfiguration sounds;
+    private final boolean soundEnabled;
+    private final Map<Pass, GenericGui> passesGui;
 
     public MainGui(
             FileConfiguration guiConfig,
             FileConfiguration messages,
+            FileConfiguration sounds,
             TimedFaction timedFaction,
             PassManager passes
     ) {
         this.timedFaction = timedFaction;
         this.messages = messages;
-        this.permsGui = new PermsGui(guiConfig, messages, timedFaction, this);
+        this.sounds = sounds;
+        this.soundEnabled = this.sounds.getBoolean("enabled");
+        this.permsGui = new PermsGui(guiConfig, messages, sounds, timedFaction, this);
         this.passesGui = new HashMap<>();
         this.initialize(
                 guiConfig.getConfigurationSection("main-menu"),
@@ -44,11 +49,13 @@ public class MainGui extends GenericGui{
         passes.getPasses().keySet().forEach(pass -> this.passesGui.put(pass, new PassGui(
                 guiConfig,
                 messages,
+                sounds,
+                pass.getName(),
                 timedFaction,
                 this,
                 passes.getPasses().get(pass))
         ));
-        this.setItems(guiConfig);
+        this.setItems();
         this.setDefaultItems();
         this.create(Gui.gui());
         this.populate(true);
@@ -65,10 +72,16 @@ public class MainGui extends GenericGui{
         );
     }
 
+    public void playSound(Player p, String soundPath) {
+        if (this.soundEnabled) {
+            SoundLoader.play(p, this.sounds.getConfigurationSection(soundPath));
+        }
+    }
+
     @Override
-    public void setItems(ConfigurationSection guiConfig) {
+    public void setItems() {
         this.items = new ArrayList<>();
-        List<Map<?, ?>> passList = guiConfig.getMapList("main-menu.passes");
+        List<Map<?, ?>> passList = this.configSection.getMapList("passes");
 
         for (Map<?, ?> passMap : passList) {
             String name = (String) passMap.get("name");
@@ -85,6 +98,7 @@ public class MainGui extends GenericGui{
                                 if (p == null) {
                                     return;
                                 }
+                                this.playSound(p.getPlayer(), "sounds.open-sub-gui");
                                 this.passesGui.get(pass).gui.open(p.getPlayer());
                             }
                     )
@@ -101,11 +115,27 @@ public class MainGui extends GenericGui{
             }
             if (p.getRole() != Role.ADMIN){
                 Msg.player(p.getPlayer(), this.messages.getString("permissions.only-leader"));
+                this.playSound(p.getPlayer(), "sounds.error");
             } else {
+                this.playSound(p.getPlayer(), "sounds.open-sub-gui");
                 this.permsGui.gui.open(p.getPlayer());
             }
         });
 
         return actions;
+    }
+
+    public boolean isViewing() {
+        boolean thisGuiViewing = super.isViewing();
+        boolean permsGuiViewing = this.permsGui.isViewing();
+        boolean passesGuiViewing = this.passesGui.values().stream().anyMatch(GenericGui::isViewing);
+        return thisGuiViewing || permsGuiViewing || passesGuiViewing;
+    }
+
+    public void update(){
+        this.defaultItemsReplaces = Map.of("info", Map.of("{time}", Timer.getVerbose(timedFaction.getTimer())));
+        super.update();
+        // this.permsGui.update();
+        this.passesGui.values().forEach(GenericGui::update);
     }
 }

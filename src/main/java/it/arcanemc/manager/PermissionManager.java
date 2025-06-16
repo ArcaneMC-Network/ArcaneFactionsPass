@@ -3,94 +3,97 @@ package it.arcanemc.manager;
 import com.google.gson.JsonObject;
 import it.arcanemc.util.json.interfaces.JsonSerializable;
 import lombok.Getter;
-import lombok.Setter;
+
+import java.util.concurrent.locks.ReentrantLock;
 
 @Getter
-@Setter
 public class PermissionManager implements JsonSerializable {
     private boolean recruit;
     private boolean member;
     private boolean moderator;
     private boolean coleader;
 
+    private final ReentrantLock lock = new ReentrantLock();
+
     public PermissionManager() {
-        this.coleader = false;
-        this.moderator = false;
-        this.member = false;
         this.recruit = false;
+        this.member = false;
+        this.moderator = false;
+        this.coleader = false;
     }
 
-    public boolean get(String role){
-        switch(role.toLowerCase()){
-            case "recruit":
-                return this.recruit;
-            case "member":
-                return this.member;
-            case "moderator":
-                return this.moderator;
-            case "coleader":
-                return this.coleader;
-            case "admin":
-                return true;
+    public boolean get(String role) {
+        lock.lock();
+        try {
+            switch (role.toLowerCase()) {
+                case "recruit": return recruit;
+                case "member": return member;
+                case "moderator": return moderator;
+                case "coleader": return coleader;
+                case "admin": return true;
+                default: throw new IllegalArgumentException(role + " does not exist as role");
+            }
+        } finally {
+            lock.unlock();
         }
-        throw new IllegalArgumentException(String.format("%s does not exist as role", role));
     }
 
     public boolean get(int value) {
-        switch(value){
-            case 0:
-                return this.recruit;
-            case 1:
-                return this.member;
-            case 2:
-                return this.moderator;
-            case 3:
-                return this.coleader;
+        lock.lock();
+        try {
+            switch (value) {
+                case 0: return recruit;
+                case 1: return member;
+                case 2: return moderator;
+                case 3: return coleader;
+                case 4: return true;
+                default: throw new IllegalArgumentException(value + " does not exist as role");
+            }
+        } finally {
+            lock.unlock();
         }
-        throw new IllegalArgumentException(String.format("%s does not exist as role", value));
     }
 
-    public boolean toggle(String role){
-        switch(role.toLowerCase()){
-            case "recruit":
-                this.recruit = !this.recruit;
-                return recruit;
-            case "member":
-                this.member = !this.member;
-                return member;
-            case "moderator":
-                this.moderator = !this.moderator;
-                return moderator;
-            case "coleader":
-                this.coleader = !this.coleader;
-                return coleader;
+    public boolean toggle(String role) {
+        lock.lock();
+        try {
+            switch (role.toLowerCase()) {
+                case "recruit": recruit = !recruit; return recruit;
+                case "member": member = !member; return member;
+                case "moderator": moderator = !moderator; return moderator;
+                case "coleader": coleader = !coleader; return coleader;
+                default: throw new IllegalArgumentException(role + " does not exist as role");
+            }
+        } finally {
+            lock.unlock();
         }
-        throw new IllegalArgumentException(String.format("%s does not exist as role", role));
     }
 
     @Override
     public JsonObject toJson() {
-        JsonObject json = new JsonObject();
-        json.addProperty("recruit", this.recruit);
-        json.addProperty("member", this.member);
-        json.addProperty("moderator", this.moderator);
-        json.addProperty("coleader", this.coleader);
-        return json;
+        lock.lock();
+        try {
+            JsonObject json = new JsonObject();
+            json.addProperty("recruit", recruit);
+            json.addProperty("member", member);
+            json.addProperty("moderator", moderator);
+            json.addProperty("coleader", coleader);
+            return json;
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
     public void fromJson(JsonObject json) {
-        if (json.has("recruit")) {
-            this.recruit = json.get("recruit").getAsBoolean();
-        }
-        if (json.has("member")) {
-            this.member = json.get("member").getAsBoolean();
-        }
-        if (json.has("moderator")) {
-            this.moderator = json.get("moderator").getAsBoolean();
-        }
-        if (json.has("coleader")) {
-            this.coleader = json.get("coleader").getAsBoolean();
+        lock.lock();
+        try {
+            if (json.has("recruit")) recruit = json.get("recruit").getAsBoolean();
+            if (json.has("member")) member = json.get("member").getAsBoolean();
+            if (json.has("moderator")) moderator = json.get("moderator").getAsBoolean();
+            if (json.has("coleader")) coleader = json.get("coleader").getAsBoolean();
+        } finally {
+            lock.unlock();
         }
     }
 }

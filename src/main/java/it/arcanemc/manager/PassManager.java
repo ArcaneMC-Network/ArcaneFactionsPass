@@ -2,7 +2,7 @@ package it.arcanemc.manager;
 
 import it.arcanemc.data.Pass;
 import it.arcanemc.data.Reward;
-import it.arcanemc.util.ItemStackLoader;
+import it.arcanemc.util.loader.ItemStackLoader;
 import it.arcanemc.util.Timer;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -10,10 +10,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public class PassManager {
-    private final HashMap<Pass, ArrayList<Reward>> passes;
+    private final Map<Pass, ArrayList<Reward>> passes;
 
     public PassManager(FileConfiguration yaml) {
         this.passes = new HashMap<>();
@@ -55,7 +56,7 @@ public class PassManager {
                     String requiredTimeVerbose = rewardSection.getString("required-time");
                     long requiredTime = Timer.convertVerbose(requiredTimeVerbose);
                     ItemStack itemStack = ItemStackLoader.get(itemSection);
-                    ArrayList<String> commands = (ArrayList<String>) rewardSection.getStringList("commands");
+                    List<String> commands = rewardSection.getStringList("commands");
                     String passName = rewardSection.getString("pass");
                     Optional<Pass> optionalPass = passes.keySet().stream()
                             .filter(instance -> passName.equalsIgnoreCase(instance.getName()))
@@ -78,5 +79,11 @@ public class PassManager {
         ConfigurationSection passesSection = yaml.getConfigurationSection("passes");
         ConfigurationSection rewardsSection = yaml.getConfigurationSection("rewards");
         this.loadPassesWithRewards(passesSection, rewardsSection);
+    }
+
+    public ArrayList<Pass> getDefaultPasses() {
+        return this.passes.keySet().stream()
+                .filter(Pass::getIsDefault)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

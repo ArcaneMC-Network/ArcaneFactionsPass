@@ -1,5 +1,6 @@
-package it.arcanemc.util;
+package it.arcanemc.util.loader;
 
+import it.arcanemc.util.Colors;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;

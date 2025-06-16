@@ -7,9 +7,11 @@ import com.google.gson.reflect.TypeToken;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import it.arcanemc.event.TimedFactionUpdateEvent;
 import it.arcanemc.manager.PermissionManager;
 import it.arcanemc.util.json.interfaces.JsonSerializable;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 
@@ -34,10 +36,12 @@ public class TimedFaction implements JsonSerializable {
         this.fromJson(json);
     }
 
-    public void update(boolean isAboveThreshold) {
+    public synchronized void update(boolean isAboveThreshold) {
         long now = System.currentTimeMillis();
         if (isAboveThreshold) {
             this.timer += now - lastUpdate;
+            TimedFactionUpdateEvent event = new TimedFactionUpdateEvent(this);
+            Bukkit.getServer().getPluginManager().callEvent(event);
         }
         lastUpdate = now;
     }
@@ -80,7 +84,7 @@ public class TimedFaction implements JsonSerializable {
         }
     }
 
-    public boolean unlockPass(Pass pass){
+    public synchronized boolean unlockPass(Pass pass){
         if (this.availablePassNames.stream().noneMatch(s -> s.equalsIgnoreCase(pass.getName()))){
             this.availablePassNames.add(pass.getName().toLowerCase());
             return true;
@@ -88,12 +92,16 @@ public class TimedFaction implements JsonSerializable {
         return false;
     }
 
-    public boolean claimReward(FPlayer player, Reward reward){
+    public synchronized boolean claimReward(FPlayer player, Reward reward){
         if (this.claimedRewardNames.stream().noneMatch(s -> s.equalsIgnoreCase(reward.getPassRewardName()))){
             this.claimedRewardNames.add(reward.getPassRewardName());
             reward.claim(player);
             return true;
         }
         return false;
+    }
+
+    public String getAvailablePassNamesString() {
+        return String.join(", ", this.availablePassNames);
     }
 }

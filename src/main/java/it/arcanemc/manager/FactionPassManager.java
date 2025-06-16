@@ -3,23 +3,18 @@ package it.arcanemc.manager;
 import com.massivecraft.factions.Faction;
 import it.arcanemc.ArcanePlugin;
 import it.arcanemc.configuration.ConfigurationManager;
-import it.arcanemc.data.Pass;
 import it.arcanemc.data.TimedFaction;
 import it.arcanemc.gui.MainGui;
-import it.arcanemc.util.Timer;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Getter
 public class FactionPassManager {
     private final ArcanePlugin plugin;
     private PassManager passManager;
     private TimedFactionManager timedFactionManager;
-    private ArrayList<MainGui> guiList;
+    private MainGuiManager guiManager;
 
     public FactionPassManager(ArcanePlugin plugin) {
         this.plugin = plugin;
@@ -27,32 +22,32 @@ public class FactionPassManager {
     }
 
     public void load(){
+        if (this.timedFactionManager != null){
+            this.timedFactionManager.stop();
+        }
+
         ConfigurationManager configs = this.plugin.getConfigurationManager();
         configs.reload();
         this.passManager = new PassManager(configs.get("config"));
+        this.passManager.load(configs.get("config"));
         this.timedFactionManager = new TimedFactionManager(this.plugin);
-        passManager.load(configs.get("config"));
-        timedFactionManager.load();
-        this.guiList = new ArrayList<>();
-        timedFactionManager.get().forEach(timedFaction -> {
-            MainGui mainGui = new MainGui(configs.get("gui"), configs.get("messages"), timedFaction, this.passManager);
-            this.guiList.add(mainGui);
+        this.passManager.getDefaultPasses().forEach(defaultPass -> {
+            this.timedFactionManager.get().forEach(timedFaction -> timedFaction.unlockPass(defaultPass));
         });
-        timedFactionManager.start();
-    }
-
-    public List<Pass> getDefaultPassNames(){
-        return this.passManager.getPasses().keySet().stream()
-                .filter(Pass::getIsDefault)
-                .collect(Collectors.toList());
+        this.guiManager = new MainGuiManager(this.plugin);
+        timedFactionManager.get().forEach(timedFaction -> {
+            MainGui mainGui = new MainGui(configs.get("gui"), configs.get("message"), configs.get("sound"), timedFaction, this.passManager);
+            this.guiManager.add(mainGui);
+        });
+        this.timedFactionManager.start();
     }
 
     public void addFaction(Faction faction){
         ConfigurationManager configs = this.plugin.getConfigurationManager();
         TimedFaction timedFaction = new TimedFaction(faction);
-        this.getDefaultPassNames().forEach(timedFaction::unlockPass);
+        this.passManager.getDefaultPasses().forEach(timedFaction::unlockPass);
         this.timedFactionManager.add(timedFaction);
-        this.guiList.add(new MainGui(configs.get("gui"), configs.get("messages"), timedFaction, this.passManager));
+        this.guiManager.add(new MainGui(configs.get("gui"), configs.get("message"), configs.get("sound"), timedFaction, this.passManager));
     }
 
     public void removeFaction(Faction faction){
@@ -61,10 +56,10 @@ public class FactionPassManager {
                 .findFirst();
         timedFactionOptional.ifPresent(this.timedFactionManager::remove);
         timedFactionOptional.ifPresent(timedFaction -> {
-            Optional<MainGui> optionalMainGui = this.guiList.stream()
+            Optional<MainGui> optionalMainGui = this.guiManager.stream()
                     .filter(mainGui -> mainGui.getTimedFaction().equals(timedFaction))
                     .findFirst();
-            optionalMainGui.ifPresent(this.guiList::remove);
+            optionalMainGui.ifPresent(this.guiManager::remove);
         });
     }
 
@@ -73,7 +68,7 @@ public class FactionPassManager {
                 .filter(timedFaction -> timedFaction.getFaction().getId().equals(faction.getId()))
                 .findFirst()
                 .flatMap(timedFaction ->
-                        this.guiList.stream()
+                        this.guiManager.stream()
                                 .filter(mainGui -> mainGui.getTimedFaction().equals(timedFaction))
                                 .findFirst()
                 )

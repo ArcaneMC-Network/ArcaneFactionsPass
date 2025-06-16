@@ -2,6 +2,7 @@ errors:
   pass-not-found: "&cPass non trovato"
   reward-not-found: "&cRicompensa non trovata"
   faction-not-found: "&cFazione non trovata"
+  invalid-command: "&cComando non valido, prova con {command}"
 
 admin:
   reload:  # fpass reload

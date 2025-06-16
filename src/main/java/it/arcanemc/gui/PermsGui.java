@@ -6,9 +6,10 @@ import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import it.arcanemc.data.TimedFaction;
-import it.arcanemc.util.ItemStackLoader;
+import it.arcanemc.util.loader.ItemStackLoader;
 import it.arcanemc.util.NumberedGuiItem;
 import it.arcanemc.util.Timer;
+import it.arcanemc.util.loader.SoundLoader;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,11 +27,14 @@ public class PermsGui extends GenericGui {
     private final TimedFaction timedFaction;
     private final ItemStack genericPerm;
     private final FileConfiguration messages;
+    private final FileConfiguration sounds;
+    private final boolean soundEnabled;
     private final GenericGui mainGui;
 
     public PermsGui(
             FileConfiguration guiConfig,
             FileConfiguration messages,
+            FileConfiguration sounds,
             TimedFaction timedFaction,
             GenericGui mainGui
     ) {
@@ -40,9 +44,11 @@ public class PermsGui extends GenericGui {
         this.timedFaction = timedFaction;
         this.genericPerm = ItemStackLoader.get(guiConfig.getConfigurationSection("perms-menu.perm"));
         this.messages = messages;
+        this.sounds = sounds;
+        this.soundEnabled = this.sounds.getBoolean("enabled");
         this.mainGui = mainGui;
         this.create(Gui.gui());
-        this.setItems(guiConfig);
+        this.setItems();
         this.populate(true);
     }
 
@@ -55,12 +61,18 @@ public class PermsGui extends GenericGui {
         );
     }
 
+    public void playSound(Player p, String soundPath) {
+        if (this.soundEnabled) {
+            SoundLoader.play(p, this.sounds.getConfigurationSection(soundPath));
+        }
+    }
+
     @Override
-    public void setItems(ConfigurationSection guiConfig) {
+    public void setItems() {
         this.items = new ArrayList<>();
         ConfigurationSection roleConfig = this.messages.getConfigurationSection("permissions.roles");
         ConfigurationSection toggleConfig = this.messages.getConfigurationSection("permissions.toggle");
-        ConfigurationSection slotsConfig = guiConfig.getConfigurationSection("perms-menu.perm.slots");
+        ConfigurationSection slotsConfig = this.configSection.getConfigurationSection("perm.slots");
         for (String key : roleConfig.getKeys(false)) {
             String role = roleConfig.getString(key);
             String state = toggleConfig.getString("disabled");
@@ -68,7 +80,7 @@ public class PermsGui extends GenericGui {
                 state = toggleConfig.getString("enabled");
             }
             ItemStack item = this.genericPerm.clone();
-            ItemStackLoader.replacePlaceholders(  // TODO: check this ItemStack saved
+            ItemStackLoader.replacePlaceholders(
                     item,
                     Map.of("{perm}", role),
                     Map.of("{state}", state)
@@ -94,6 +106,7 @@ public class PermsGui extends GenericGui {
                                 if (oldItem != null) {
                                     oldItem.setItemStack(i);
                                     this.gui.updateItem(slotsConfig.getInt(perm), oldItem);
+                                    this.playSound((Player) e.getWhoClicked(), "sounds.toggle-permission");
                                 }
                             }
                     )
@@ -109,6 +122,7 @@ public class PermsGui extends GenericGui {
                 return;
             }
             this.mainGui.gui.open(p.getPlayer());
+            this.playSound((Player) e.getWhoClicked(), "sounds.back-button");
         });
 
         return actions;
