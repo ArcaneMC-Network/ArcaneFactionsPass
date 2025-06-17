@@ -100,7 +100,7 @@ public class PassGui extends GenericGui {
         int slot = e.getSlot();
 
         long timeLeft = reward.getRequiredTime() - timedFaction.getTimer();
-        if (!timedFaction.getAvailablePassNames().contains(reward.getPass().getName())) {
+        if (!timedFaction.getAvailablePassNames().contains(reward.getPass().getName().toLowerCase())) {
             Msg.player(player.getPlayer(), messages.getString("reward.claim.locked")
                     .replace("{name}", this.name));
             this.playSound(player.getPlayer(), "sounds.pass-locked");
