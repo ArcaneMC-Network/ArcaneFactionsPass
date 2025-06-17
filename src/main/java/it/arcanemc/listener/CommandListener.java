@@ -44,14 +44,46 @@ public class CommandListener implements Listener {
             event.setCancelled(true);
             String[] parts = event.getMessage().split(" ");
             if (parts.length != 4) {
-                Msg.player(player, this.factionPassManager.getPlugin().getConfigurationManager().get("message").getString("errors.invalid-command")
-                .replace("{command}", "/f pass show <faction>"));
+                Msg.player(player, this.factionPassManager.getPlugin().getConfigurationManager().get("message").getString("errors.invalid-command"));
                 return;
             }
             String factionName = parts[3];
             CommandHandler.showTimedFactionAvailablePasses(this.factionPassManager, factionName, player);
+            return;
         }
 
+        if (command.startsWith("/faction pass add") || command.startsWith("/f pass add")) {
+            if (!player.hasPermission("arcanefactionspass.admin.add")) {
+                Msg.player(player, this.factionPassManager.getPlugin().getConfigurationManager().get("message").getString("errors.no-permission"));
+                return;
+            }
+            event.setCancelled(true);
+            String[] parts = event.getMessage().split(" ");
+            if (parts.length != 5) {
+                Msg.player(player, this.factionPassManager.getPlugin().getConfigurationManager().get("message").getString("errors.invalid-command"));
+                return;
+            }
+            String playerName = parts[3];
+            String passName = parts[4];
+            CommandHandler.addPassToPlayer(this.factionPassManager, playerName, passName, player);
+            return;
+        }
 
+        if (command.startsWith("/faction pass remove") || command.startsWith("/f pass remove")) {
+            if (!player.hasPermission("arcanefactionspass.admin.add")) {
+                Msg.player(player, this.factionPassManager.getPlugin().getConfigurationManager().get("message").getString("errors.no-permission"));
+                return;
+            }
+            event.setCancelled(true);
+            String[] parts = event.getMessage().split(" ");
+            if (parts.length != 5) {
+                Msg.player(player, this.factionPassManager.getPlugin().getConfigurationManager().get("message").getString("errors.invalid-command"));
+                return;
+            }
+            String factionName = parts[3];
+            String passName = parts[4];
+            CommandHandler.removePassToFaction(this.factionPassManager, factionName, passName, player);
+            return;
+        }
     }
 }

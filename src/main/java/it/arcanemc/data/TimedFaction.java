@@ -85,8 +85,16 @@ public class TimedFaction implements JsonSerializable {
     }
 
     public synchronized boolean unlockPass(Pass pass){
-        if (this.availablePassNames.stream().noneMatch(s -> s.equalsIgnoreCase(pass.getName()))){
+        if (this.availablePassNames.stream().noneMatch(s -> s.equalsIgnoreCase(pass.getName().toLowerCase()))){
             this.availablePassNames.add(pass.getName().toLowerCase());
+            return true;
+        }
+        return false;
+    }
+
+    public synchronized boolean removePass(Pass pass){
+        if (this.availablePassNames.stream().anyMatch(s -> s.equalsIgnoreCase(pass.getName().toLowerCase()))){
+            this.availablePassNames.removeIf(s -> s.equalsIgnoreCase(pass.getName().toLowerCase()));
             return true;
         }
         return false;

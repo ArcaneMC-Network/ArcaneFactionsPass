@@ -1,7 +1,9 @@
 package it.arcanemc;
 
 import dev.rollczi.litecommands.LiteCommands;
+import dev.rollczi.litecommands.LiteCommandsBuilder;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
+import dev.rollczi.litecommands.message.MessageKey;
 import it.arcanemc.configuration.ConfigurationManager;
 import it.arcanemc.configuration.DependencyManager;
 import it.arcanemc.configuration.ListenerManager;
@@ -10,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public abstract class ArcanePlugin extends JavaPlugin {
@@ -67,9 +70,17 @@ public abstract class ArcanePlugin extends JavaPlugin {
         return List.of().toArray();
     }
 
+    public Map<MessageKey<?>, String> getCommandMessages() {
+        // This method can be overridden by subclasses to return a list of messages if needed.
+        return Map.of();
+    }
+
     public void loadCommands(){
-        this.liteCommands = LiteBukkitFactory.builder(prefix,this).commands(
+        LiteCommandsBuilder<CommandSender, ?, ?> builder = LiteBukkitFactory.builder(prefix, this);
+        builder.commands(
                 getCommands()
-        ).build();
+        );
+        getCommandMessages().forEach(builder::message);
+        this.liteCommands = builder.build();
     }
 }

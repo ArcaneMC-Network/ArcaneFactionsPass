@@ -43,4 +43,28 @@ public class FPassCommand {
     ) {
         CommandHandler.showTimedFactionAvailablePasses(this.factionPassManager, factionName, commandSender);
     }
+
+    @Execute(name="add")
+    @Permission("arcanefactionspass.admin.add")
+    void executeFPassAdd(
+            @Context CommandSender commandSender,
+            @Arg String playerName,
+            @Arg String passName
+    ) {
+        CommandHandler.addPassToPlayer(this.factionPassManager, playerName, passName, commandSender);
+    }
+
+    @Execute(name="remove")
+    @Permission("arcanefactionspass.admin.remove")
+    void executeFPassRemove(
+            @Context CommandSender commandSender,
+            @Arg String factionName,
+            @Arg String passName
+    ) {
+        CommandHandler.removePassToFaction(this.factionPassManager, factionName, passName, commandSender);
+    }
+
+
+
+
 }

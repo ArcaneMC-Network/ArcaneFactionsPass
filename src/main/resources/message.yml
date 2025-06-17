@@ -1,8 +1,9 @@
 errors:
-  pass-not-found: "&cPass non trovato"
+  pass-not-found: "&cPass {pass} non trovato e non aggiunto"
   reward-not-found: "&cRicompensa non trovata"
   faction-not-found: "&cFazione non trovata"
-  invalid-command: "&cComando non valido, prova con {command}"
+  player-not-found: "&cGiocatore non trovato"
+  invalid-command: "&cComando non valido, prova con /fpass help"
 
 admin:
   reload:  # fpass reload
@@ -28,8 +29,7 @@ reward:
 
 
 unlock-pass:
-  success: "&6&lF-PASS &8- &fLa fazione {faction} ha sbloccato il pass {name}"
-  deny: "&6&lF-PASS &8- &fLa tua fazione possiede già il pass {name}"
+  success: "&6&lF-PASS &8- &fLa fazione {faction} ha sbloccato il pass {pass}"
 
 permissions:
   only-leader: "&cSolo il leader può accedere ai permessi"

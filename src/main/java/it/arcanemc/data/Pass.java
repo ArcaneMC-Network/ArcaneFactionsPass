@@ -10,7 +10,7 @@ public class Pass {
     private final ItemStack itemStack;
 
     public Pass(String name, Boolean isDefault, ItemStack itemStack) {
-        this.name = name.toLowerCase();
+        this.name = name;
         this.isDefault = isDefault;
         this.itemStack = itemStack;
     }

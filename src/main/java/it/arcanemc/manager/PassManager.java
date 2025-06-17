@@ -2,6 +2,7 @@ package it.arcanemc.manager;
 
 import it.arcanemc.data.Pass;
 import it.arcanemc.data.Reward;
+import it.arcanemc.util.Format;
 import it.arcanemc.util.loader.ItemStackLoader;
 import it.arcanemc.util.Timer;
 import lombok.Getter;
@@ -39,7 +40,7 @@ public class PassManager {
                     boolean isDefault = passSection.getBoolean("default");
                     ConfigurationSection itemSection = passSection.getConfigurationSection("item");
                     ItemStack itemStack = ItemStackLoader.get(itemSection);
-                    Pass pass = new Pass(key, isDefault, itemStack);
+                    Pass pass = new Pass(Format.capitalize(key), isDefault, itemStack);
                     passes.put(pass, new ArrayList<>());
                 }
             }

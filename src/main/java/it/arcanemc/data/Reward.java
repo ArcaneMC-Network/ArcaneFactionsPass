@@ -25,7 +25,7 @@ public class Reward {
     }
 
     public String getPassRewardName(){
-        return String.format("%s.%s", pass.getName(), this.name);
+        return String.format("%s.%s", pass.getName().toLowerCase(), this.name);
     }
 
     public void claim(FPlayer player){

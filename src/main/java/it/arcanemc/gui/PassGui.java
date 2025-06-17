@@ -42,7 +42,7 @@ public class PassGui extends GenericGui {
 
     public PassGui(FileConfiguration guiConfig, FileConfiguration messages, FileConfiguration sounds, String name, TimedFaction timedFaction, GenericGui mainGui, ArrayList<Reward> rewards) {
         ConfigurationSection passMenuSection = guiConfig.getConfigurationSection("pass-menu");
-        this.name = Format.capitalize(name);
+        this.name = name;
         this.initialize(passMenuSection, Map.of("{name}", this.name), Map.of("info", Map.of("{time}", Timer.getVerbose(timedFaction.getTimer()))));
         this.timedFaction = timedFaction;
         this.messages = messages;
@@ -100,7 +100,7 @@ public class PassGui extends GenericGui {
         int slot = e.getSlot();
 
         long timeLeft = reward.getRequiredTime() - timedFaction.getTimer();
-        if (!reward.getPass().getIsDefault() && !timedFaction.getAvailablePassNames().contains(reward.getPass().getName())) {
+        if (!timedFaction.getAvailablePassNames().contains(reward.getPass().getName())) {
             Msg.player(player.getPlayer(), messages.getString("reward.claim.locked")
                     .replace("{name}", this.name));
             this.playSound(player.getPlayer(), "sounds.pass-locked");
